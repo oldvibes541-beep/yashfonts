@@ -1,68 +1,22 @@
-from telegram import Update
-from telegram.ext import (
-    Application,
-    CommandHandler,
-    MessageHandler,
-    ContextTypes,
-    filters
-)
+import asyncio
+import os
+from telegram.ext import ApplicationBuilder, CommandHandler
+from fonts import fonts_data
 
-from fonts import *
+BOT_TOKEN = os.getenv('8837685584:AAExZCf_QFxvOfHp-12qBa17J9XktGmcRqI')
+async def start(update, context):
+    await update.message.reply_text("Bot chal gaya 🔥\n/font naam bhej")
 
-TOKEN = "8837685584:AAExZCf_QFxvOfHp-12qBa17J9XktGmcRqI"
+async def font(update, context):
+    # tera font wala logic yaha
+    pass
 
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🤖 Welcome To Yash Bots\n\n"
-        "Send any text and get stylish fonts."
-    )
-
-
-async def convert(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
-
-    result = []
-
-    result.append("𝗕𝗼𝗹𝗱\n" + text.translate(BOLD))
-    result.append("𝘐𝘵𝘢𝘭𝘪𝘤\n" + text.translate(ITALIC))
-    result.append("𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘\n" + text.translate(BOLD_ITALIC))
-    result.append("𝙈𝙤𝙣𝙤𝙨𝙥𝙖𝙘𝙚\n" + text.translate(MONO))
-    result.append("𝔻𝕠𝕦𝕓𝕝𝕖 𝕊𝕥𝕣𝕦𝕔𝕜\n" + text.translate(DOUBLE))
-
-    result.append("Small Caps\n" + small_caps(text))
-    result.append(boxed(text))
-    result.append(fancy(text))
-    result.append(crown(text))
-    result.append(fire(text))
-    result.append(star(text))
-    result.append(diamond(text))
-    result.append(heart(text))
-    result.append(arrow(text))
-    result.append(king(text))
-    result.append(queen(text))
-    result.append(lightning(text))
-    result.append(skull(text))
-    result.append(flower(text))
-    result.append(rocket(text))
-
-    await update.message.reply_text("\n\n".join(result))
-
-
-def main():
-    app = Application.builder().token(TOKEN).build()
-
+async def main():
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(
-        MessageHandler(
-            filters.TEXT & ~filters.COMMAND,
-            convert
-        )
-    )
+    app.add_handler(CommandHandler("font", font))
+    print("Bot started...")
+    await app.run_polling()
 
-    print("Yash Bots Running...")
-    app.run_polling()
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    asyncio.run(main())
